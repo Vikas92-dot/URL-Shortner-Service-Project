@@ -8,7 +8,7 @@ const userRoute = require('./routes/user');
 
 const path = require('path');
 const {connectToMongoDB} = require('./connect');
-const {restrictToLoggedinUserOnly} = require('./middlewares/auth');
+const {restrictToLoggedinUserOnly, checkAuth} = require('./middlewares/auth');
 const app = express();
 const PORT = 8002;
 
@@ -23,7 +23,7 @@ app.use(cookieParser());
 
 app.use('/url',restrictToLoggedinUserOnly, urlRoute);
 app.use('/user', userRoute);
-app.use("/", staticRoute);
+app.use("/", checkAuth, staticRoute);
 
 app.set("view engine","ejs");
 app.set("views", path.resolve("./views"));
